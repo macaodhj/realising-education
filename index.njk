@@ -1,0 +1,11 @@
+---
+layout: layout.njk
+title: Realising Education
+---
+<h1>Welcome to Realising Education</h1>
+<p>Exploring education, attention, and transformative pedagogy.</p>
+<ul>
+  {% for post in collections.blog | reverse %}
+    <li><a href="{{ post.url }}">{{ post.data.title }}</a> - {{ post.date | date("long") }}</li>
+  {% endfor %}
+</ul>
