@@ -2,10 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Realising Education Content Manager</title>
+    <title>Content Manager</title>
+    <script src="https://unpkg.com/@decap-cms/app@^3.0.0/dist/decap-cms.js"></script>
   </head>
   <body>
-    <!-- Load Decap CMS -->
-    <script src="https://unpkg.com/@decap-cms/app@^3.0.0/dist/decap-cms.js" onload="CMS.init()"></script>
+    <script>
+      if (typeof CMS !== "undefined") {
+        CMS.init();
+      } else {
+        document.body.innerHTML = "<p style='color:red;'>CMS failed to load.</p>";
+      }
+    </script>
   </body>
 </html>
