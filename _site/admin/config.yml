@@ -1,5 +1,6 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: macaodhj/realising-education
   branch: main
 
 media_folder: "img"
