@@ -2,7 +2,9 @@ backend:
   name: github
   repo: macaodhj/realising-education
   branch: main
-  auth_scope: repo
+  client_id: Ov23lizWCWL25d3Te7Nc
+  base_url: https://realising.education
+  auth_endpoint: /api/auth
 
 media_folder: "static/img"
 public_folder: "/img"
