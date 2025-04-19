@@ -3,15 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Content Manager</title>
-    <script src="https://unpkg.com/decap-cms@latest/dist/decap-cms.js"></script>
   </head>
   <body>
-    <script>
-      if (typeof CMS !== "undefined") {
-        CMS.init();
-      } else {
-        document.body.innerHTML += "<p style='color:red;'>CMS failed to load.</p>";
-      }
-    </script>
+    <!-- Load Decap CMS -->
+    <script src="https://unpkg.com/decap-cms@latest/dist/decap-cms.js"></script>
   </body>
 </html>
