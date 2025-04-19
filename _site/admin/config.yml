@@ -2,6 +2,8 @@ backend:
   name: github
   repo: macaodhj/realising-education
   branch: main
+  base_url: https://realising-education-cms-proxy.realising-cms.workers.dev
+  auth_endpoint: oauth
 
 media_folder: "static/img"
 public_folder: "/img"
