@@ -1,17 +1,26 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Realising Education Content Manager</title>
-    <script src="https://unpkg.com/@decap-cms/app@3.0.0/dist/decap-cms.js"></script>
-  </head>
-  <body>
-    <script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Realising Education CMS</title>
+</head>
+<body>
+  <h1>Loading CMS…</h1>
+  <script>
+    // Dynamically load the Decap CMS script and initialise safely
+    const script = document.createElement("script");
+    script.src = "https://unpkg.com/@decap-cms/app@3.0.0/dist/decap-cms.js";
+    script.onload = () => {
       if (typeof CMS !== "undefined") {
         CMS.init();
       } else {
-        document.body.innerHTML = "<p style='color:red;'>CMS failed to load.</p>";
+        document.body.innerHTML += "<p style='color:red;'>CMS is not defined after loading script.</p>";
       }
-    </script>
-  </body>
+    };
+    script.onerror = () => {
+      document.body.innerHTML += "<p style='color:red;'>Failed to load Decap CMS script.</p>";
+    };
+    document.head.appendChild(script);
+  </script>
+</body>
 </html>
