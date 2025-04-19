@@ -3,13 +3,13 @@ backend:
   repo: macaodhj/realising-education
   branch: main
 
-media_folder: "img"
+media_folder: "static/img"
 public_folder: "/img"
 
 collections:
   - name: "blog"
     label: "Blog"
-    folder: "blog"
+    folder: "content/blog"
     create: true
     slug: "{{slug}}"
     fields:
