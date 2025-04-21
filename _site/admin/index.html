@@ -3,19 +3,26 @@
   <head>
     <meta charset="utf-8" />
     <title>Realising Education Content Manager</title>
-    <script src="https://cdn.jsdelivr.net/npm/decap-cms@3.0.0/dist/decap-cms.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/decap-cms@3.0.0/dist/decap-cms.js"></script>
   </head>
   <body>
-    <!-- Required mount point for Decap CMS -->
     <div id="nc-root"></div>
 
     <script>
-      window.addEventListener('load', () => {
+      // Retry init if CMS isn't yet defined
+      function tryInitCMS(retries = 5) {
         if (window.CMS) {
           window.CMS.init();
+        } else if (retries > 0) {
+          console.warn("CMS not ready. Retrying...");
+          setTimeout(() => tryInitCMS(retries - 1), 500);
         } else {
           console.error("Decap CMS did not load.");
         }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        tryInitCMS();
       });
     </script>
   </body>
