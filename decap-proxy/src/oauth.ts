@@ -1,49 +1,49 @@
-type OAuthConfig = {
-	id: string;
-	secret: string;
-	target: {
-		tokenHost: string;
-		tokenPath: string;
-		authorizePath: string;
-	};
-};
-
-export class OAuthClient {
-	private clientConfig: OAuthConfig;
-
-	constructor(config: OAuthConfig) {
-		this.clientConfig = config;
+export async function handleOAuthStart(request: Request, env: any): Promise<Response> {
+	const client_id = env.GITHUB_OAUTH_ID;
+	const redirect_uri = new URL(request.url).origin + "/oauth/callback";
+	const state = crypto.randomUUID();
+  
+	const authUrl = `https://github.com/login/oauth/authorize` +
+	  `?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=repo&state=${state}`;
+  
+	return Response.redirect(authUrl, 302);
+  }
+  
+  export async function handleOAuthCallback(request: Request, env: any): Promise<Response> {
+	const url = new URL(request.url);
+	const code = url.searchParams.get("code");
+  
+	if (!code) {
+	  return new Response("Missing code", { status: 400 });
 	}
-
-	authorizeURL(options: { redirect_uri: string; scope: string; state: string }) {
-		const { clientConfig } = this;
-		const { tokenHost, authorizePath } = clientConfig.target;
-		const { redirect_uri, scope, state } = options;
-
-		return `${tokenHost}${authorizePath}?response_type=code&client_id=${clientConfig.id}&redirect_uri=${redirect_uri}&scope=${scope}&state=${state}`;
+  
+	const response = await fetch("https://github.com/login/oauth/access_token", {
+	  method: "POST",
+	  headers: {
+		"Content-Type": "application/json",
+		Accept: "application/json",
+	  },
+	  body: JSON.stringify({
+		client_id: env.GITHUB_OAUTH_ID,
+		client_secret: env.GITHUB_OAUTH_SECRET,
+		code,
+	  }),
+	});
+  
+	const token = await response.json();
+  
+	if (token.error) {
+	  return new Response(`GitHub OAuth Error: ${token.error_description || token.error}`, {
+		status: 500,
+		headers: { "Content-Type": "application/json" },
+	  });
 	}
-
-	async getToken(options: { code: string; redirect_uri: string }) {
-		const { clientConfig } = this;
-		const { tokenHost, tokenPath } = clientConfig.target;
-		const { code, redirect_uri } = options;
-
-		const response = await fetch(`${tokenHost}${tokenPath}`, {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				client_id: clientConfig.id,
-				client_secret: clientConfig.secret,
-				code,
-				redirect_uri,
-				grant_type: 'authorization_code',
-			}),
-		});
-
-		const json = (await response.json()) as { access_token: string };
-		return json.access_token;
-	}
-}
+  
+	return new Response(JSON.stringify(token), {
+	  headers: {
+		"Content-Type": "application/json",
+		"Access-Control-Allow-Origin": "*",
+	  },
+	});
+  }
+  
