@@ -7,7 +7,13 @@
   </head>
   <body>
     <script>
-      window.CMS.init();
+      window.addEventListener('load', () => {
+        if (window.CMS) {
+          window.CMS.init();
+        } else {
+          console.error("Decap CMS did not load.");
+        }
+      });
     </script>
   </body>
 </html>
